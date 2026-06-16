@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iStream — Watch what moves you.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 3 L2 25 L24 14 Z" fill="#FC4C02"/>
+        <path d="M15 5 L9 14 L13 14 L12 23 L19 14 L15 14 Z" fill="rgba(255,255,255,0.88)"/>
+      </svg>
+      <span class="logo-wordmark"><span class="logo-i">i</span>Stream</span>
+    </div>
+
+    <div class="sidebar-browse-label">BROWSE</div>
+
+    <nav id="sidebar-nav" class="sidebar-nav"></nav>
+
+    <div class="sidebar-bottom">
+      <div class="live-counter">
+        <span class="live-counter-dot"></span>
+        <span id="live-count-text">— live</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-wrapper">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button id="hamburger" class="hamburger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-live">
+          <span class="topbar-live-dot"></span>
+          <span id="topbar-match-count" class="topbar-count"></span>
+        </div>
+        <span class="topbar-watermark">iStream</span>
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content">
+
+      <div id="player-panel" class="player-panel hidden">
+        <div class="player-header">
+          <div id="player-title" class="player-title-text"></div>
+          <button id="fs-btn" class="fs-btn-header" title="Fullscreen (F)" aria-label="Fullscreen">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <polyline points="9 21 3 21 3 15"></polyline>
+              <line x1="21" y1="3" x2="14" y2="10"></line>
+              <line x1="3" y1="21" x2="10" y2="14"></line>
+            </svg>
+          </button>
+          <button id="close-player" class="close-btn" aria-label="Close player">✕</button>
+        </div>
+        <div class="iframe-wrapper">
+          <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="progress-bar-track">
+              <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <div class="overlay-logo">
+              <svg width="40" height="40" viewBox="0 0 28 28" fill="none">
+                <path d="M2 3 L2 25 L24 14 Z" fill="#FC4C02"/>
+                <path d="M15 5 L9 14 L13 14 L12 23 L19 14 L15 14 Z" fill="rgba(255,255,255,0.88)"/>
+              </svg>
+            </div>
+          </div>
+          <div id="quality-badge" class="quality-badge hidden"></div>
+          <iframe
+            id="stream-iframe"
+            allowfullscreen="true"
+            webkitallowfullscreen="true"
+            mozallowfullscreen="true"
+            allow="autoplay; fullscreen *; picture-in-picture; encrypted-media; accelerometer; gyroscope"
+            scrolling="no"
+            frameborder="0"
+            muted
+            style="border:none;"
+          ></iframe>
+          <div class="fs-hover-overlay" id="fs-hover-overlay">
+            <button class="fs-center-btn" id="fs-center-btn">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="1.8">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+              <span>Fullscreen</span>
+            </button>
+          </div>
+          <div id="unmute-overlay" class="unmute-overlay hidden">
+            <button id="unmute-btn" class="unmute-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+              </svg>
+              Tap to unmute
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="kb-hint" class="kb-hint hidden">
+        Press <kbd>F</kbd> for fullscreen · <kbd>←</kbd><kbd>→</kbd> to switch streams · <kbd>Esc</kbd> to close
+      </div>
+
+      <div class="section-heading">
+        <h1 id="section-title" class="section-title">Live Now</h1>
+        <span id="section-badge" class="section-badge hidden"></span>
+      </div>
+
+      <div id="matches-grid" class="matches-grid"></div>
+
+      <div id="empty-state" class="empty-state hidden">
+        <svg width="48" height="48" viewBox="0 0 28 28" fill="none" style="opacity:0.6">
+          <path d="M2 3 L2 25 L24 14 Z" fill="#FC4C02"/>
+          <path d="M15 5 L9 14 L13 14 L12 23 L19 14 L15 14 Z" fill="rgba(255,255,255,0.88)"/>
+        </svg>
+        <h2 class="empty-title">No matches right now</h2>
+        <p class="empty-sub">Check back soon or try another sport.</p>
+        <button id="empty-refresh" class="empty-refresh-btn">Refresh</button>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="player-bar" class="player-bar hidden">
+    <div class="bar-left">
+      <span id="bar-sport-badge" class="bar-sport-badge"></span>
+      <span id="bar-match-title" class="bar-match-title"></span>
+      <span class="bar-now-streaming">▶ Now streaming</span>
+    </div>
+    <div class="bar-center">
+      <span id="bar-quality" class="q-badge"></span>
+      <span id="bar-language" class="bar-info-text"></span>
+      <span id="bar-source" class="source-chip bar-source"></span>
+    </div>
+    <div class="bar-right">
+      <button id="prev-stream" class="bar-nav-btn" aria-label="Previous stream">◀</button>
+      <span id="bar-stream-counter" class="bar-stream-counter"></span>
+      <button id="next-stream" class="bar-nav-btn" aria-label="Next stream">▶</button>
+      <button id="bar-close" class="bar-close-btn" aria-label="Close player">✕</button>
+    </div>
+  </div>
+
+  <script src="/js/constants.js"></script>
+  <script src="/js/state.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/player.js"></script>
+  <script src="/js/streams.js"></script>
+  <script src="/js/matches.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
