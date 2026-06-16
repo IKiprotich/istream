@@ -10,7 +10,7 @@ Built on top of the streamed.pk API with a clean dark UI.
 ## Run it
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/istream.git
+git clone https://github.com/IKiprotich/istream.git
 cd istream
 npm install
 npm run dev
